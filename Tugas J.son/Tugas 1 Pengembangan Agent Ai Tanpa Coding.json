@@ -1,0 +1,115 @@
+{
+  "name": "AI Chatbot Kursus IT",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "hallo ngab apa kabs kenalin gua netten bot kesayangan lu ada perlu apa hari ini bro gua bisa bantu jawab apapun pertanyaan lu seputar IT",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "cdd02f9e-c90d-4d23-a4bb-d993799de410",
+      "name": "When chat message received",
+      "webhookId": "e37944ca-8777-4ff8-883f-83ce8753b0a6"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Kamu adalah chatbot AI yang memberikan informasi tentang bidang IT (Teknologi Informasi).\nJawab pertanyaan pengguna yang berkaitan dengan IT seperti komputer, jaringan, software, hardware, dan keamanan siber secara jelas dan sederhana.\nJika informasi tidak tersedia, jawab dengan jujur bahwa informasi tersebut tidak ditemukan dan jangan mengarang jawaban.\nGunakan bahasa Indonesia yang sopan, jelas, dan mudah dipahami."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        48,
+        -16
+      ],
+      "id": "a39c236b-4630-49b3-91c9-052d40eaa381",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        48,
+        192
+      ],
+      "id": "a485b9f9-eb33-455f-8dec-c53b774c3898",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "k5grWCxPSfnhVbRy",
+          "name": "Google Gemini(PaLM) Api account 3"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        176,
+        224
+      ],
+      "id": "7c08ffe4-3bdb-427b-a720-f926ff7a1f2e",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "c3868690-afce-4907-a520-6c32d0cccfef",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a5df06fd13290af2fa8e5429150de9f9c332b581c1019292577ff8c83814cbde"
+  },
+  "id": "KRLQlycfGV7FXZdD",
+  "tags": []
+}
