@@ -1,0 +1,110 @@
+{
+  "name": "Tugas 1 Pertemuan 1 Implementasi Ai untuk Pemasaran",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Pendaftaran Kicaw Mania Depok",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nama",
+              "fieldName": "Nama",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "fieldName": "Email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Umur Burung ",
+              "fieldType": "number",
+              "fieldName": "Umur Burung ",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Kategori",
+              "fieldType": "checkbox",
+              "fieldName": "Kategori",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "baby"
+                  },
+                  {
+                    "option": "remaja "
+                  },
+                  {
+                    "option": "dewasa"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b0f2e1fb-b17b-4a54-84b2-df09e9683422",
+      "name": "On form submission",
+      "webhookId": "9b1f33d2-ec15-4f82-96d9-cd8dca299d3b"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Selamatt !!!",
+        "message": "=<!DOCTYPE html>\n<html>\n<head>\n  <style>\n    /* Reset dasar untuk kompatibilitas email client */\n    body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f0ebf8; }\n    .container { max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }\n    .header { background-color: #673ab7; /* Warna Ungu Google Form */ color: #ffffff; padding: 24px; text-align: center; }\n    .header h1 { margin: 0; font-size: 20px; font-weight: 600; }\n    .content { padding: 30px; color: #333333; line-height: 1.6; }\n    .data-box { background-color: #f8f9fa; border-left: 4px solid #673ab7; padding: 15px; margin: 20px 0; border-radius: 4px; }\n    .data-row { margin-bottom: 10px; }\n    .label { font-weight: bold; color: #5f6368; font-size: 14px; }\n    .value { color: #202124; font-size: 16px; }\n    .footer { background-color: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #888888; border-top: 1px solid #eeeeee; }\n    .button { display: inline-block; background-color: #673ab7; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 4px; margin-top: 20px; font-weight: bold; }\n  </style>\n</head>\n<body>\n\n  <div class=\"container\">\n    <div class=\"header\">\n      <h1>Konfirmasi Pendaftaran<br>Kicaw Mania Depok</h1>\n    </div>\n\n    <div class=\"content\">\n      <p>Halo <strong>{{ $json[\"Nama\"] }}</strong>,</p>\n      \n      <p>Terima kasih telah melakukan pendaftaran. Data Anda telah berhasil kami terima di sistem Kicaw Mania Depok.</p>\n      \n      <p>Berikut adalah rincian data yang Anda kirimkan:</p>\n\n      <div class=\"data-box\">\n        <div class=\"data-row\">\n          <div class=\"label\">Nama Lengkap</div>\n          <div class=\"value\">{{ $json[\"Nama\"] }}</div>\n        </div>\n        \n        <div class=\"data-row\">\n          <div class=\"label\">Email Terdaftar</div>\n          <div class=\"value\">{{ $json[\"Email\"] }}</div>\n        </div>\n\n        <div class=\"data-row\">\n          <div class=\"label\">Umur Burung</div>\n          <div class=\"value\">{{ $json['Umur Burung '] }}</div>\n        </div>\n\t<div class=\"data-row\">\n          <div class=\"label\">Kategori</div>\n          <div class=\"value\">{{ $json[\"Kategori\"] }}</div>\n        </div>\n      </div>\n\n      <p>Mohon cek kembali data di atas. Jika ada kesalahan atau pertanyaan lebih lanjut, silakan balas email ini.</p>\n      \n      <p>Selanjutnya, tim kami akan melakukan verifikasi dan menghubungi Anda untuk langkah berikutnya.</p>\n      \n      <br>\n      <p>Salam hangat,<br><strong>Tim Penerimaan Kicaw Mania Depok</strong></p>\n    </div>\n\n    <div class=\"footer\">\n      &copy; 2025 Kicaw Mania Depok. All rights reserved.<br>\n      Email ini dikirim secara otomatis melalui sistem pendaftaran.\n    </div>\n  </div>\n\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "429c0cfe-3445-46ac-ad3a-ce13abb3690a",
+      "name": "Send a message",
+      "webhookId": "12a0497f-c40c-4a7f-995d-dd01cbdc0f6e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mEZKk6JWQY7a7VU8",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "e246b779-979b-4960-9508-2aa1a0bb0c1a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a5df06fd13290af2fa8e5429150de9f9c332b581c1019292577ff8c83814cbde"
+  },
+  "id": "07zyq9t0RQ6eZ7sW",
+  "tags": []
+}
