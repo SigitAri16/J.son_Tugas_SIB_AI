@@ -30,27 +30,29 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        864,
-        1536
+        880,
+        496
       ],
-      "id": "a1088beb-8336-4842-bb34-d92577ed465e",
+      "id": "75bc1b0b-0f39-4b52-b5f9-fa8c3e83f78b",
       "name": "Edit Fields"
     },
     {
       "parameters": {
         "promptType": "define",
-        "text": "=Buat rencana konten harian untuk {{ $json.tanggal }} dengan tema  {{ $json.tema }} \n\nSaya mau Anda buatnya dalam bentuk nomor atau point bahasa indonesia sertakan caption untuk menggeneret video.",
+        "text": "=Buat rencana konten harian untuk {{ $json.tanggal }} dengan tema  {{ $json.tema }} \n\nSaya mau Anda buatnya dalam bentuk nomor atau point bahasa indo.",
         "hasOutputParser": true,
         "batching": {}
       },
       "type": "@n8n/n8n-nodes-langchain.chainLlm",
       "typeVersion": 1.7,
       "position": [
-        1072,
-        1536
+        1088,
+        496
       ],
-      "id": "0c506f50-5ae1-4b6f-840a-d49247df37c0",
-      "name": "Membuat Ide Konten"
+      "id": "20fc8051-6007-456d-b0ac-18b88a210c56",
+      "name": "Membuat Ide Konten",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000
     },
     {
       "parameters": {
@@ -59,10 +61,10 @@
       "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
       "typeVersion": 1.3,
       "position": [
-        1216,
-        1376
+        1232,
+        336
       ],
-      "id": "13cbab69-6ce5-413a-9dc2-cc1f98f4f0e5",
+      "id": "6bc35438-0e69-4522-8941-8355ec50105e",
       "name": "Output LLM"
     },
     {
@@ -106,10 +108,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1488,
-        1056
+        1504,
+        16
       ],
-      "id": "b8d5c7f0-e94a-4863-bf1f-8afb0665d6a6",
+      "id": "918d7c78-3c09-4333-bddf-842ba2ba773f",
       "name": "Output 1"
     },
     {
@@ -153,10 +155,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1488,
-        1216
+        1504,
+        176
       ],
-      "id": "b150dd82-be1b-4efa-a712-54c835b66c81",
+      "id": "3ec33434-eba8-408d-b719-31145309a3d2",
       "name": "Output 2"
     },
     {
@@ -200,10 +202,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1488,
-        1376
+        1504,
+        336
       ],
-      "id": "e15e99f9-6402-4f03-93e7-46522f813183",
+      "id": "09e2d576-685e-4cba-8fad-4524d9e6a636",
       "name": "Output 3"
     },
     {
@@ -247,10 +249,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1488,
-        1536
+        1504,
+        496
       ],
-      "id": "611e2fdf-2196-460a-a2d5-6ae646be43f7",
+      "id": "f910b472-df03-4825-9855-64c3fe315c38",
       "name": "Output  4"
     },
     {
@@ -260,27 +262,25 @@
       "type": "n8n-nodes-base.merge",
       "typeVersion": 3.2,
       "position": [
-        1760,
-        1456
+        1776,
+        416
       ],
-      "id": "3fedfb9e-df53-460e-afc5-861b3a77d772",
+      "id": "e9e1708e-1151-4a3d-b88a-46dbf80d2cf6",
       "name": "Merge"
     },
     {
       "parameters": {
         "chatId": "1433602326",
         "text": "=Title: {{ $json.title }}\n\nPlatform: {{ $json.platform }}\n\nIde: {{ $json.ide }}",
-        "additionalFields": {
-          "appendAttribution": false
-        }
+        "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1968,
-        1488
+        1984,
+        448
       ],
-      "id": "7ed8c86a-0969-4a9e-a3bb-b73ba2d1c831",
+      "id": "b56b2dca-724f-4a29-9616-9d9446eabe42",
       "name": "Kirim Ide ke Tim",
       "webhookId": "6f7b959f-91ae-445f-a295-aec2be83d29b",
       "credentials": {
@@ -300,10 +300,10 @@
       "type": "n8n-nodes-base.telegramTrigger",
       "typeVersion": 1.2,
       "position": [
-        -256,
-        1776
+        -240,
+        736
       ],
-      "id": "f181b8da-580a-4f62-b7ff-2f3c20c8d66e",
+      "id": "13b8fc3e-94b0-43a1-b216-1b016adedf4f",
       "name": "Telegram Trigger",
       "webhookId": "f306a709-4a6c-4d57-92a7-bb262bd52e18",
       "credentials": {
@@ -341,10 +341,10 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        384,
-        1552
+        400,
+        512
       ],
-      "id": "65824ed9-5cd9-49fd-8438-2dea106bf910",
+      "id": "f51a73f1-a6cb-4945-84c9-3b3371e08018",
       "name": "If"
     },
     {
@@ -356,10 +356,10 @@
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        416,
-        1360
+        688,
+        336
       ],
-      "id": "36a3bda0-14b4-4de9-ac88-f441fb308c1e",
+      "id": "34cab3f9-9e8a-4fa6-a345-53bed3b8c0de",
       "name": "Format salah (False)",
       "webhookId": "344961dc-582f-4d28-a91e-ccc0d9b7f5bc",
       "credentials": {
@@ -372,20 +372,40 @@
     {
       "parameters": {
         "chatId": "={{ $json.message.from.id }}",
-        "text": "Ari sedang memproses request Anda, harap tunggu sebentar.",
-        "additionalFields": {
-          "appendAttribution": false
-        }
+        "text": "Systia sedang memproses request Anda, harap tunggu sebentar.",
+        "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        -128,
-        1968
+        -64,
+        960
       ],
-      "id": "a7e0973e-fc3e-4610-8b14-6e812e8b3841",
+      "id": "e184417a-3420-4fe6-8d7f-65b8c5016c6d",
       "name": "Respon Cepat",
       "webhookId": "c5faba3b-7193-4911-bc4f-fd9bc0d50f15",
+      "credentials": {
+        "telegramApi": {
+          "id": "bswwkAX6YitVs2QV",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').item.json.message.photo[3].file_id }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        416,
+        1056
+      ],
+      "id": "9f937dd3-2f67-4635-8008-64abbcde09e7",
+      "name": "Get a file",
+      "webhookId": "8a10aa78-8500-4f40-b7d0-52471f024721",
       "credentials": {
         "telegramApi": {
           "id": "bswwkAX6YitVs2QV",
@@ -404,9 +424,9 @@
       "typeVersion": 1.2,
       "position": [
         2320,
-        1760
+        720
       ],
-      "id": "124c9c04-5d87-47aa-a36d-d8b0f59a343a",
+      "id": "333bc366-3b34-453a-afe3-3419dd4e2f73",
       "name": "Kirim Gambar",
       "webhookId": "280810a6-c0e2-4982-8828-7ff14e19b303",
       "credentials": {
@@ -475,11 +495,11 @@
                 "conditions": [
                   {
                     "id": "84225419-f387-44ef-ba8e-4f2f779be83c",
-                    "leftValue": "={{ $json.message.captiont }}",
-                    "rightValue": "video",
+                    "leftValue": "={{ $json.message.photo ? \"ada\" : \"nggak\" }}",
+                    "rightValue": "ada",
                     "operator": {
                       "type": "string",
-                      "operation": "contains"
+                      "operation": "equals"
                     }
                   }
                 ],
@@ -493,10 +513,10 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.3,
       "position": [
-        144,
-        1760
+        160,
+        720
       ],
-      "id": "f7f4714c-bfd6-4a48-8796-7e25800fcd13",
+      "id": "910997d4-e9dc-48ef-9f10-a0db71696e26",
       "name": "Switch"
     },
     {
@@ -509,10 +529,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        208,
-        1056
+        0,
+        0
       ],
-      "id": "7eb7d728-29b4-49f3-b9e6-b98b920ee136",
+      "id": "9af3d8eb-844d-482f-9fd5-efc2b6e01b98",
       "name": "Sticky Note",
       "disabled": true
     },
@@ -526,10 +546,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        384,
-        1712
+        400,
+        672
       ],
-      "id": "6bfa8b0c-4bcd-40fd-97cd-c4b053a16f23",
+      "id": "8afff85a-25f2-4871-b3fc-49135d633004",
       "name": "Sticky Note1",
       "disabled": true
     },
@@ -541,10 +561,10 @@
       "type": "n8n-nodes-base.extractFromFile",
       "typeVersion": 1.1,
       "position": [
-        608,
-        2096
+        624,
+        1408
       ],
-      "id": "aad29608-a392-4fab-8d55-6d41d74a5737",
+      "id": "110e60ca-9347-4591-8213-608f525fc986",
       "name": "Extract from File"
     },
     {
@@ -562,17 +582,11 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        1232,
-        2096
+        1312,
+        1408
       ],
-      "id": "bc8f1be0-ff25-4da6-b14f-8b9a8b6756c7",
-      "name": "Generate a video",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "k5grWCxPSfnhVbRy",
-          "name": "Google Gemini(PaLM) Api account 3"
-        }
-      }
+      "id": "0ff94868-dbcd-4110-bb71-5803d95abcae",
+      "name": "Generate a video"
     },
     {
       "parameters": {
@@ -591,45 +605,26 @@
       "type": "@n8n/n8n-nodes-langchain.googleGemini",
       "typeVersion": 1,
       "position": [
-        1024,
-        2096
+        1088,
+        1408
       ],
-      "id": "eb4cffca-3baf-435d-a712-e5d04674c1e6",
-      "name": "Analyze an image",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "k5grWCxPSfnhVbRy",
-          "name": "Google Gemini(PaLM) Api account 3"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "jsCode": "items.forEach(item => {\n  // Pastikan item memiliki field 'data' berupa string base64\n  if (item.json && item.json.data) {\n    const base64String = item.json.data;\n    \n    // Konversi string base64 ke Buffer (binary)\n    const buffer = Buffer.from(base64String, 'base64');\n    \n    // Buat properti binary baru\n    item.binary = {\n      data: {\n        data: buffer,\n        fileName: 'image.jpg', // Ganti sesuai ekstensi asli jika perlu\n        mimeType: 'image/jpeg'\n      }\n    };\n  }\n});\n\nreturn items;"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        816,
-        2096
-      ],
-      "id": "2503ef89-a445-475c-9134-f86ff1956daf",
-      "name": "base64 to binary"
+      "id": "1f6abbd0-0416-4694-aa2f-39cccb7bf1ed",
+      "name": "Analyze an image"
     },
     {
       "parameters": {
         "operation": "sendVideo",
-        "chatId": "={{ $('Telegram Trigger').item.json.message.from.id }}",
-        "binaryData": true,
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "file": "={{ JSON.parse($node[\"status generate\"].json.data.resultJson).resultUrls[0] }}",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
       "position": [
-        1440,
-        2096
+        2000,
+        1040
       ],
-      "id": "dac641b4-f504-4bcd-bc01-f5ce2c4427ad",
+      "id": "c033e413-9138-4f65-9eaf-fc3a67329767",
       "name": "Send a video",
       "webhookId": "3896b5a6-b542-485b-a0e2-ebf680907f04",
       "credentials": {
@@ -649,10 +644,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        384,
-        2016
+        400,
+        976
       ],
-      "id": "cbd16bb0-31d1-4fb8-a953-f4fca35442a8",
+      "id": "6a04d030-6a5e-4a8b-b24a-32621c6eecec",
       "name": "Sticky Note2",
       "disabled": true
     },
@@ -673,10 +668,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        448,
-        1776
+        464,
+        736
       ],
-      "id": "bd462cb9-14de-4a1a-ad4d-ccca1cc7ed50",
+      "id": "d41dff53-f329-4dd2-b816-99ec6b517253",
       "name": "Edit Fields1"
     },
     {
@@ -701,12 +696,12 @@
         "jsonBody": "={{\n  JSON.stringify({\n    \"model\": \"grok-imagine/text-to-image\",\n    \"input\": {\n      \"prompt\": $('Edit Fields1').item.json.prompt,\n      \"aspect_ratio\": \"3:2\"\n    }\n  })\n}}",
         "options": {}
       },
-      "id": "58d1ab00-943f-45a7-9a20-e291be883b85",
+      "id": "765a8007-c773-47af-936b-c30e269bf60c",
       "name": "Mengirim Image Generation Request ke KIE.AI API",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        832,
-        1776
+        848,
+        736
       ],
       "typeVersion": 4.2
     },
@@ -714,12 +709,12 @@
       "parameters": {
         "amount": 10
       },
-      "id": "ba7f9ee3-82c7-490c-900f-a165afef5c43",
+      "id": "52fe5dda-1161-4be2-8ca7-46f76c6975da",
       "name": "Menunggu Proses Generate Gambar",
       "type": "n8n-nodes-base.wait",
       "position": [
-        1040,
-        1776
+        1056,
+        736
       ],
       "webhookId": "bb6c2821-9586-44b7-8606-2ee69a77ed75",
       "typeVersion": 1.1
@@ -751,12 +746,12 @@
         },
         "options": {}
       },
-      "id": "6be62fed-33e2-4120-85bd-623da08be911",
+      "id": "7d52cff9-1eb5-46b2-94db-73fe2bcd09d9",
       "name": "Mendapatkan Status Generate",
       "type": "n8n-nodes-base.httpRequest",
       "position": [
-        1264,
-        1776
+        1280,
+        736
       ],
       "typeVersion": 4.2
     },
@@ -786,12 +781,12 @@
         "looseTypeValidation": true,
         "options": {}
       },
-      "id": "d4aa9041-f92a-452e-9fcc-5cbd2f78d7f6",
+      "id": "3875e7de-dd24-44a5-a426-5a790eacfe61",
       "name": "Check Jika Generate Sudah Selesai",
       "type": "n8n-nodes-base.if",
       "position": [
-        1488,
-        1776
+        1504,
+        736
       ],
       "typeVersion": 2.2
     },
@@ -802,10 +797,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1920,
-        1760
+        1936,
+        720
       ],
-      "id": "187f02df-3d15-4fdd-8521-83909bbb189a",
+      "id": "f711824a-e2de-435a-a3c3-3a1b1b7dc9cc",
       "name": "Loop Image"
     },
     {
@@ -822,10 +817,10 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.3,
       "position": [
-        2096,
-        1760
+        2112,
+        720
       ],
-      "id": "3318d0e3-6bc5-4c52-889e-6c7c4a9ca9e8",
+      "id": "9c5bca98-fa51-42ff-88ad-117684563826",
       "name": "Download Gambar"
     },
     {
@@ -835,7 +830,7 @@
             {
               "id": "c8889b9f-cf2f-45a0-a3a4-b79f32bbb507",
               "name": "api_key",
-              "value": "4af9863302380bbb7aeec072bdf2071f",
+              "value": "27f3a2d19b81d7d7fde3ebe0e1486d53",
               "type": "string"
             }
           ]
@@ -845,10 +840,10 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        640,
-        1776
+        656,
+        736
       ],
-      "id": "0dfd934b-e1c9-43de-8e13-cc412b1ccb24",
+      "id": "73d0c623-eeb7-4373-a1ac-b8846a018fee",
       "name": "Edit Fields2"
     },
     {
@@ -858,10 +853,10 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1712,
-        1760
+        1728,
+        720
       ],
-      "id": "f3cac9eb-9742-401f-add0-9947dabb2315",
+      "id": "337b32a9-2589-49b7-ad7f-834e2782ee4c",
       "name": "Format Result"
     },
     {
@@ -873,9 +868,9 @@
       "typeVersion": 1,
       "position": [
         1088,
-        1376
+        336
       ],
-      "id": "f40b2a9e-7c98-4f3b-9973-946ecd79739c",
+      "id": "01e6fcb0-b381-4afa-9df5-277fd6d7e876",
       "name": "Groq Chat Model",
       "credentials": {
         "groqApi": {
@@ -886,25 +881,145 @@
     },
     {
       "parameters": {
-        "resource": "file",
-        "fileId": "={{ $json.message.photo[0].file_id }}",
-        "additionalFields": {}
+        "amount": 20
       },
-      "type": "n8n-nodes-base.telegram",
-      "typeVersion": 1.2,
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
       "position": [
-        400,
-        2112
+        1312,
+        1056
       ],
-      "id": "d27a6a6f-bd67-42d5-b3ee-aa14ccd5592f",
-      "name": "Get a file",
-      "webhookId": "8a10aa78-8500-4f40-b7d0-52471f024721",
-      "credentials": {
-        "telegramApi": {
-          "id": "bswwkAX6YitVs2QV",
-          "name": "Telegram account 2"
-        }
-      }
+      "id": "6d558dc6-db1b-44be-b600-91fb664595c2",
+      "name": "Wait",
+      "webhookId": "c3b096f5-3cc2-4dd2-9a80-b35ec6d5013c"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.kie.ai/api/v1/jobs/createTask",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 27f3a2d19b81d7d7fde3ebe0e1486d53"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"grok-imagine/image-to-video\",\n  \"input\": {\n    \"image_urls\": [\n      \"{{ $json.data.url }}\"\n    ],\n    \"prompt\": \"make it cinematic move\",\n    \"mode\": \"normal\",\n    \"duration\": \"6\",\n    \"resolution\": \"480p\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1040,
+        1056
+      ],
+      "id": "e6ae6812-fa87-4e6f-b4d0-14c5ae884807",
+      "name": "image generation request"
+    },
+    {
+      "parameters": {
+        "url": "https://api.kie.ai/api/v1/jobs/recordInfo",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "taskId",
+              "value": "={{ $json.data.taskId }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer 27f3a2d19b81d7d7fde3ebe0e1486d53"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1536,
+        1056
+      ],
+      "id": "1064fd63-27a7-43eb-9afa-b9da02383e71",
+      "name": "status generate"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "217ca8bd-5ee5-4e40-a3ba-e2919a2ee84a",
+              "leftValue": "success",
+              "rightValue": "={{ $json.data.state }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1728,
+        1056
+      ],
+      "id": "57bcee13-05e0-4ba5-9d52-aebad84f2ff5",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.imgbb.com/1/upload",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "key",
+              "value": "3427da03a4ca668e6fe39387e84dd9af"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "image",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        624,
+        1056
+      ],
+      "id": "f4d48267-6891-4ea7-b38f-ecbcf1b6439a",
+      "name": "imgBB"
     }
   ],
   "pinData": {},
@@ -1046,6 +1161,17 @@
         ]
       ]
     },
+    "Get a file": {
+      "main": [
+        [
+          {
+            "node": "imgBB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
     "Switch": {
       "main": [
         [
@@ -1071,44 +1197,11 @@
         ]
       ]
     },
-    "Extract from File": {
-      "main": [
-        [
-          {
-            "node": "base64 to binary",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Analyze an image": {
       "main": [
         [
           {
             "node": "Generate a video",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "base64 to binary": {
-      "main": [
-        [
-          {
-            "node": "Analyze an image",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Generate a video": {
-      "main": [
-        [
-          {
-            "node": "Send a video",
             "type": "main",
             "index": 0
           }
@@ -1232,11 +1325,62 @@
         ]
       ]
     },
-    "Get a file": {
+    "Wait": {
       "main": [
         [
           {
-            "node": "Extract from File",
+            "node": "status generate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "image generation request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "status generate": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send a video",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "imgBB": {
+      "main": [
+        [
+          {
+            "node": "image generation request",
             "type": "main",
             "index": 0
           }
@@ -1250,11 +1394,11 @@
     "binaryMode": "separate",
     "availableInMCP": false
   },
-  "versionId": "e902762e-f1f6-483e-9e28-eb2e44a3e57e",
+  "versionId": "4f4957fd-6d19-468b-81c3-cb6d78d6e342",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "a5df06fd13290af2fa8e5429150de9f9c332b581c1019292577ff8c83814cbde"
   },
-  "id": "fQzvKdHhCvDeWffP",
+  "id": "zQCH4FR4Z6pv703S",
   "tags": []
 }
