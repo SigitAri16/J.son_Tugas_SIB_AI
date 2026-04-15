@@ -1,0 +1,407 @@
+{
+  "name": "Tugas 2 Implementasi AI keuangan",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailReadImap",
+      "typeVersion": 2.1,
+      "position": [
+        -624,
+        16
+      ],
+      "id": "b5660bd3-74af-4407-ace1-b2bf0a2db242",
+      "name": "Email Trigger (IMAP)",
+      "credentials": {
+        "imap": {
+          "id": "9kibmIRfgJAJ8UpZ",
+          "name": "IMAP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.from }}",
+                    "rightValue": "yuandikazovi@gmail.com",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "f37a4dce-7b23-406a-987d-cad30122044b"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "MobaPay"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ef2b341b-fad3-4e59-9a46-41c746b7c338",
+                    "leftValue": "={{ $json.from }}",
+                    "rightValue": "sigi23181@studen.nurulfikri.ac.id",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Bale BTN"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "934bfa51-a4d0-4284-94b3-31a5786bc66f",
+                    "leftValue": "={{ $json.from }}",
+                    "rightValue": "budigaming3417@gmail.com",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Indihome"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -400,
+        32
+      ],
+      "id": "0e3e0fea-0d42-4150-a0a4-20b372d7a062",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dcc5f52d-7e19-4ed5-902d-7a078a36620f",
+              "name": "Tanggal ",
+              "value": "={{ $json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "6fb45a83-f9c4-4a7f-b1f7-619e416e202f",
+              "name": "Harga Awal",
+              "value": "={{ $json.textPlain.match(/Price:\\s*([\\d\\.]+)\\s*Rp/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "537ed35d-b8ef-4681-8d42-34e078e2bf9c",
+              "name": "Total",
+              "value": "={{ $json.textPlain.match(/Subtotal:\\s*([\\d\\.]+)\\s*Rp/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "94e7b5ec-ef94-4fd3-af2a-df70eab73e73",
+              "name": "Produk ",
+              "value": "={{ $json.textPlain.match(/^(.+)/)?.[1].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -192,
+        -160
+      ],
+      "id": "c7cd2863-9c44-4855-8142-79846797431d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1dC1pR4Uy7DtVGiTLc2eLJrRfdjHpvpXGOREIiDPDa_4",
+          "mode": "list",
+          "cachedResultName": "Pencatat Keuangan ",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dC1pR4Uy7DtVGiTLc2eLJrRfdjHpvpXGOREIiDPDa_4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1dC1pR4Uy7DtVGiTLc2eLJrRfdjHpvpXGOREIiDPDa_4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Tanggal": "={{ $json['Tanggal '] }}",
+            "Jumlah ": "={{ $json.Total }}",
+            "Produk": "={{ $json['Produk '] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Tanggal",
+              "displayName": "Tanggal",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Jumlah ",
+              "displayName": "Jumlah ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Produk",
+              "displayName": "Produk",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        384,
+        -32
+      ],
+      "id": "5808e96e-8962-4dc9-a50b-929e65dd4bcb",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GxEFiAxejqi2qmb2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 3
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        64,
+        -48
+      ],
+      "id": "44ba9385-86f4-4978-b70e-e0a04deaae8b",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dcc5f52d-7e19-4ed5-902d-7a078a36620f",
+              "name": "Tanggal ",
+              "value": "={{ $json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "6fb45a83-f9c4-4a7f-b1f7-619e416e202f",
+              "name": "Harga Awal",
+              "value": "={{ $json.textPlain.match(/Price:\\s*([\\d\\.]+)\\s*Rp/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "537ed35d-b8ef-4681-8d42-34e078e2bf9c",
+              "name": "Total",
+              "value": "={{ $json.textPlain.match(/Subtotal:\\s*([\\d\\.]+)\\s*Rp/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "94e7b5ec-ef94-4fd3-af2a-df70eab73e73",
+              "name": "Produk ",
+              "value": "={{ $json.textPlain.match(/^(.+)/)?.[1].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        240
+      ],
+      "id": "c1d97d9e-579e-4d6b-9616-d5a5a931b0db",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dcc5f52d-7e19-4ed5-902d-7a078a36620f",
+              "name": "Tanggal ",
+              "value": "={{ $json.date }}",
+              "type": "string"
+            },
+            {
+              "id": "6fb45a83-f9c4-4a7f-b1f7-619e416e202f",
+              "name": "Harga Awal",
+              "value": "={{ $json.textPlain.match(/Price:\\s*([\\d\\.]+)\\s*Rp/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "537ed35d-b8ef-4681-8d42-34e078e2bf9c",
+              "name": "Total",
+              "value": "={{ $json.textPlain.match(/Subtotal:\\s*([\\d\\.]+)\\s*Rp/)?.[1].replace(/\\./g, '') }}",
+              "type": "string"
+            },
+            {
+              "id": "94e7b5ec-ef94-4fd3-af2a-df70eab73e73",
+              "name": "Produk ",
+              "value": "={{ $json.textPlain.match(/^(.+)/)?.[1].trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -208,
+        96
+      ],
+      "id": "0d33aac8-4890-4d8a-aa06-c32649ca2c4b",
+      "name": "Edit Fields1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Email Trigger (IMAP)": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        []
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "5ff6f7dd-1e0a-45fd-b16b-d0f943b37ba8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a5df06fd13290af2fa8e5429150de9f9c332b581c1019292577ff8c83814cbde"
+  },
+  "id": "bnz9cQJ0ebDYgCq6",
+  "tags": []
+}
