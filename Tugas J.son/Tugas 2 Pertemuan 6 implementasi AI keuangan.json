@@ -1,0 +1,285 @@
+{
+  "name": "Tugas 2 Pertemuan 6 implementasi AI keuangan",
+  "nodes": [
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1VDMIoNoZ-_WESuFyMJ8vrrKCU2_K9jbuNrsQ_BZp7Qg",
+          "mode": "list",
+          "cachedResultName": "Data dummy catatan keuangan",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VDMIoNoZ-_WESuFyMJ8vrrKCU2_K9jbuNrsQ_BZp7Qg/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 143687939,
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1VDMIoNoZ-_WESuFyMJ8vrrKCU2_K9jbuNrsQ_BZp7Qg/edit#gid=143687939"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -464,
+        -48
+      ],
+      "id": "c47a7225-3d39-43e2-badf-86d9c10017a9",
+      "name": "ambil log pengeluaran",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GxEFiAxejqi2qmb2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -672,
+        -48
+      ],
+      "id": "020daa51-926d-41f7-9640-7dd53240f833",
+      "name": "Setiao minggu"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst today = new Date();\ntoday.setHours(23, 59, 59, 999); // inklusif hari ini sampai akhir hari\n\nconst sevenDaysAgo = new Date();\nsevenDaysAgo.setDate(today.getDate() - 7);\nsevenDaysAgo.setHours(0, 0, 0, 0);\n\nlet weeklyExpenses = [];\nlet formattedString = \"Data pengeluaran saya minggu ini:\\n\";\nlet hasExpenses = false;\n\nfor (const item of items) {\n  const rawTanggal = item.json.Tanggal; // format: \"13/04/2026\"\n  \n  // Parse manual DD/MM/YYYY → YYYY-MM-DD agar valid di semua engine\n  const [day, month, year] = rawTanggal.split(\"/\");\n  const expenseDate = new Date(`${year}-${month}-${day}`);\n\n  if (expenseDate >= sevenDaysAgo && expenseDate <= today) {\n    weeklyExpenses.push(item.json);\n    formattedString += `- ${item.json.Deskripsi}: Rp${item.json[\"Jumlah (IDR)\"]}\\n`;\n    hasExpenses = true;\n  }\n}\n\nreturn [{\n  json: {\n    promptData: formattedString,\n    hasExpenses: hasExpenses\n  }\n}];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -256,
+        -48
+      ],
+      "id": "a7b88ddd-c6db-4f42-96c1-317103dd477a",
+      "name": "filter 7 hari"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "f97db840-1ef0-40e5-a3fa-f9c7631c4ed5",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "01b9ed14-f5ce-4a52-8133-1253a615bc1d",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -48,
+        -48
+      ],
+      "id": "03f26ec4-db69-46bd-b8da-08860d1ffe8d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=\n{{ $json.promptData }} \nTulis ringkasan kebiasaan belanja saya minggu ini dan beri 1 saran penghematan.\n",
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        144,
+        -144
+      ],
+      "id": "94a130f4-94d4-4219-87fc-c143595307de",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        144,
+        -304
+      ],
+      "id": "22a2e224-26de-4e43-9273-55cb29f744df",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "Qv88Odi7tNbJrf1R",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1433602326",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        496,
+        -144
+      ],
+      "id": "c50d706d-3efb-4953-ae3b-813f11d67d1b",
+      "name": "Send a text message",
+      "webhookId": "b229c7a9-97a3-4fe4-a8ff-f7dc8481e823",
+      "credentials": {
+        "telegramApi": {
+          "id": "bswwkAX6YitVs2QV",
+          "name": "Telegram account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "1433602326",
+        "text": "asasnmanmnam",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        112,
+        48
+      ],
+      "id": "338c8ed7-3425-41bb-8b0e-19c9516fb3c7",
+      "name": "Send a text message1",
+      "webhookId": "276cada1-c0f3-4a73-97be-67f9a068fd0c",
+      "credentials": {
+        "telegramApi": {
+          "id": "bswwkAX6YitVs2QV",
+          "name": "Telegram account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Setiao minggu": {
+      "main": [
+        [
+          {
+            "node": "ambil log pengeluaran",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ambil log pengeluaran": {
+      "main": [
+        [
+          {
+            "node": "filter 7 hari",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "filter 7 hari": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7913e3ee-b8b0-4512-a282-ba27ed2b0375",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a5df06fd13290af2fa8e5429150de9f9c332b581c1019292577ff8c83814cbde"
+  },
+  "id": "cu9Gom3Dgixy8djK",
+  "tags": []
+}
