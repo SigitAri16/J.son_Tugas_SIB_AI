@@ -1,0 +1,562 @@
+{
+  "name": "Final Projek judul 2",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Anda adalah AI HR Assistant perusahaan yang bertugas membuat Surat Peringatan (SP) resmi untuk karyawan berdasarkan data pelanggaran yang diberikan.\n\nBuat surat dengan bahasa formal, profesional, sopan, dan sesuai etika ketenagakerjaan Indonesia.\n\nData Karyawan:\n\nNama Karyawan:{{ $json['Nama Karyawan'] }}\nJabatan:{{ $json['Jabatan '] }}\nDivisi: {{ $json['divisi '] }}\nJenis SP: {{ $json['Status SP'] }}\nJenis Pelanggaran: {{ $json['Jenis Pelanggaran '] }}\nDeskripsi Pelanggaran: {{ $json['Deskripsi Pelanggaran '] }}\nTanggal Kejadian: {{ $json['Tanggal Kejadian '] }}\nNama Manajer:{{ $json['Nama Manajer '] }}\nPerusahaan : {{ $json['Perusahaan '] }}\n\nInstruksi:\n\nBuat format surat resmi perusahaan.\nJelaskan pelanggaran secara singkat tetapi jelas.\nSertakan bahwa perusahaan memberikan {{ $json['Status SP'] }} kepada karyawan.\nGunakan bahasa formal dan profesional.\nBerikan peringatan agar pelanggaran tidak diulangi kembali.\nTambahkan konsekuensi apabila pelanggaran terjadi kembali.\nTutup surat dengan sopan.\nJangan gunakan poin-poin, buat dalam format surat lengkap.\nrapihkan tulisan nya dan jangan berantakan.\n\nOutput harus langsung berupa isi surat siap pakai tanpa penjelasan tambahan.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        -16
+      ],
+      "id": "b24deb73-01ee-42fb-b559-a7626a91fe88",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-20b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        416,
+        176
+      ],
+      "id": "d069406c-9477-4b81-b454-8a1ffa378419",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "FXu7qsTrEijnlgL3",
+          "name": "Groq account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Form Pengajuan Surat Peringatan Karyawan",
+        "formDescription": "Form ini digunakan oleh manajer untuk membuat Surat Peringatan (SP) kepada karyawan yang melakukan pelanggaran disiplin kerja. Mohon isi data dengan lengkap dan jelas agar sistem dapat membuat surat resmi secara otomatis.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Nama Manajer"
+            },
+            {
+              "fieldLabel": "Nama Karyawan"
+            },
+            {
+              "fieldLabel": "Jabatan ",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Staff Gudang"
+                  },
+                  {
+                    "option": "Admin Finance"
+                  },
+                  {
+                    "option": "IT support "
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Jenis Pelanggaran "
+            },
+            {
+              "fieldLabel": "Deskripsi Pelanggaran"
+            },
+            {
+              "fieldLabel": "Tanggal Kejadian ",
+              "fieldType": "date"
+            },
+            {
+              "fieldLabel": "Status SP",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "SP 1"
+                  },
+                  {
+                    "option": "SP 2"
+                  },
+                  {
+                    "option": "PHK "
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Divisi",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Oprasional"
+                  },
+                  {
+                    "option": "Finance"
+                  },
+                  {
+                    "option": "IT"
+                  }
+                ]
+              }
+            },
+            {
+              "fieldLabel": "Email Karyawan  ",
+              "fieldType": "email"
+            },
+            {
+              "fieldLabel": "Perusahaan"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -208,
+        -16
+      ],
+      "id": "c9d774c3-5a0b-44e9-8441-8bf0d720782e",
+      "name": "Form Pengajuan SP",
+      "webhookId": "927cf39f-ab27-42bf-8c06-84052ff6527f"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of items) {\n\n  const nama = $('Form Pengajuan SP')\n    .first()\n    .json['Nama Karyawan']\n    .replace(/\\s+/g, '_');\n\n  item.binary.data.fileName = `Surat_Peringatan_${nama}.pdf`;\n}\n\nreturn items;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        -16
+      ],
+      "id": "2860ed43-b019-47fc-a7c6-4242b15340eb",
+      "name": "Mengedit Nama File"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form Pengajuan SP').item.json['Email Karyawan  '] }}",
+        "subject": "=Surat Peringatan {{ $('Form Pengajuan SP').item.json['Status SP'] }} - {{ $('Form Pengajuan SP').item.json['Nama Karyawan'] }}",
+        "message": "=Halo , {{ $('Form Pengajuan SP').item.json['Nama Karyawan'] }} Melalui email ini, kami melampirkan Surat Peringatan  {{ $('Form Pengajuan SP').item.json['Status SP'] }} terkait dengan kedisiplinan kerja Saudara/i.  Berdasarkan catatan perusahaan, Saudara/i telah melakukan pelanggaran berupa:  Jenis Pelanggaran:{{ $('Form Pengajuan SP').item.json['Jenis Pelanggaran '] }}   Keterangan:    Tanggal Kejadian:{{ $('Form Pengajuan SP').item.json['Tanggal Kejadian '] }}  Kami berharap Saudara/i dapat memberikan perhatian serius terhadap hal ini dan segera melakukan perbaikan kinerja serta kedisiplinan di masa mendatang.  Silakan unduh lampiran PDF pada email ini untuk rincian selengkapnya. Jika ada yang ingin diklarifikasi, silakan hubungi bagian HRD atau manajer terkait ({{ $('Form Pengajuan SP').item.json['Nama Manajer'] }}).  Terima kasih atas perhatiannya.  Salam,  Manajemen Perusahaan",
+        "options": {
+          "appendAttribution": false,
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        1504,
+        -32
+      ],
+      "id": "527ada03-6111-4168-bf95-f44316917603",
+      "name": "Kirim Ke email Karyawan",
+      "webhookId": "e62138e8-9760-405a-9f9a-091eefd4215a",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "mEZKk6JWQY7a7VU8",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "aee420b7-e699-458a-8d32-d5ae2bb00943",
+              "name": "Nama Karyawan",
+              "value": "={{ $('Form Pengajuan SP').item.json['Nama Karyawan'] }}",
+              "type": "string"
+            },
+            {
+              "id": "e1239576-b7db-4624-ae3d-2337a7d22c18",
+              "name": "Status SP",
+              "value": "={{ $('Form Pengajuan SP').item.json['Status SP'] }}",
+              "type": "string"
+            },
+            {
+              "id": "54cc47f9-51c9-42a7-bf16-bd4ed1cc3a49",
+              "name": "Tanggal Kejadian ",
+              "value": "={{ $('Form Pengajuan SP').item.json['Tanggal Kejadian '] }}",
+              "type": "string"
+            },
+            {
+              "id": "cbf8c2de-434b-441f-afd5-74b3672994d0",
+              "name": "Jenis Pelanggaran ",
+              "value": "={{ $('Form Pengajuan SP').item.json['Jenis Pelanggaran '] }}",
+              "type": "string"
+            },
+            {
+              "id": "22338019-d88a-47fb-8125-5c47a20ec77c",
+              "name": "Jabatan ",
+              "value": "={{ $('Form Pengajuan SP').item.json['Jabatan '] }}",
+              "type": "string"
+            },
+            {
+              "id": "6c348004-d859-4472-84f0-9b45f0052d68",
+              "name": "Deskripsi Pelanggaran ",
+              "value": "={{ $('Form Pengajuan SP').item.json['Deskripsi Pelanggaran'] }}",
+              "type": "string"
+            },
+            {
+              "id": "6a537f46-9585-4012-81aa-fe6ccbbbf16a",
+              "name": "Email Karyawan",
+              "value": "={{ $json['Email Karyawan'] }}",
+              "type": "string"
+            },
+            {
+              "id": "04308803-9224-438c-a295-a61e6b5164df",
+              "name": "divisi ",
+              "value": "={{ $json.Divisi }}",
+              "type": "string"
+            },
+            {
+              "id": "f7af195c-8e9e-4dd5-b585-b45bcf39ef36",
+              "name": "Nama Manajer ",
+              "value": "={{ $json['Nama Manajer'] }}",
+              "type": "string"
+            },
+            {
+              "id": "8b49d9c8-0e56-47db-a227-c3c788134764",
+              "name": "Perusahaan ",
+              "value": "={{ $json['Perusahaan '] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        -16
+      ],
+      "id": "2fde2c2b-a373-400e-a81d-4fb2311e399c",
+      "name": "mengambil data karyawan"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Pb9XYLnN2gxgnw1L3DiDGyg95gOTGO6y9j-Qugeyg7g",
+          "mode": "list",
+          "cachedResultName": "Dummy_Surat_Peringatan",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Pb9XYLnN2gxgnw1L3DiDGyg95gOTGO6y9j-Qugeyg7g/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 613822810,
+          "mode": "list",
+          "cachedResultName": "Data Pelanggaran",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Pb9XYLnN2gxgnw1L3DiDGyg95gOTGO6y9j-Qugeyg7g/edit#gid=613822810"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Perusahaan ": "={{ $json.Perusahaan }}",
+            "Nama Manajer": "={{ $json['Nama Manajer'] }}",
+            "Nama Karyawan": "={{ $json['Nama Karyawan'] }}",
+            "Jabatan": "={{ $json['Jabatan '] }}",
+            "Jenis Pelanggaran": "={{ $json['Jenis Pelanggaran '] }}",
+            "Deskripsi Pelanggaran": "={{ $json['Deskripsi Pelanggaran'] }}",
+            "Divisi": "={{ $json.Divisi }}",
+            "Email Karyawan": "={{ $json['Email Karyawan  '] }}",
+            "Status SP": "={{ $json['Status SP'] }}",
+            "Tanggal Kejadian": "={{ $json['Tanggal Kejadian '] }}"
+          },
+          "matchingColumns": [
+            "Perusahaan "
+          ],
+          "schema": [
+            {
+              "id": "Perusahaan ",
+              "displayName": "Perusahaan ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Nama Manajer",
+              "displayName": "Nama Manajer",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nama Karyawan",
+              "displayName": "Nama Karyawan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Jabatan",
+              "displayName": "Jabatan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Divisi",
+              "displayName": "Divisi",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Jenis Pelanggaran",
+              "displayName": "Jenis Pelanggaran",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Deskripsi Pelanggaran",
+              "displayName": "Deskripsi Pelanggaran",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Tanggal Kejadian",
+              "displayName": "Tanggal Kejadian",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status SP",
+              "displayName": "Status SP",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email Karyawan",
+              "displayName": "Email Karyawan",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        0,
+        -16
+      ],
+      "id": "6e5b76dd-10c6-484e-a8f6-0f95b6a2255f",
+      "name": "Memasukan data ke sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "GxEFiAxejqi2qmb2",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html>\n<head>\n    <style>\n        body {\n            background-color: #f4f4f9;\n            display: flex;\n            justify-content: center;\n            padding: 20px;\n            font-family: \"Times New Roman\", Times, serif;\n        }\n        .container {\n            background-color: #ffffff;\n            width: 100%;\n            max-width: 800px;\n            padding: 40px;\n            border: 1px solid #ddd;\n            box-shadow: 0 4px 8px rgba(0,0,0,0.1);\n            border-radius: 4px;\n        }\n        .header {\n            text-align: center;\n            border-bottom: 2px solid #333;\n            margin-bottom: 20px;\n            padding-bottom: 10px;\n        }\n        h1 {\n            color: #d9534f; /* Warna merah untuk peringatan */\n            margin: 0;\n            font-size: 24px;\n            text-transform: uppercase;\n        }\n        .content {\n            white-space: pre-line; /* Ini kunci agar \\n jadi baris baru */\n            line-height: 1.6;\n            font-size: 12pt;\n            color: #333;\n            text-align: justify;\n        }\n    </style>\n</head>\n<body>\n    <div class=\"container\">\n        <div class=\"header\">\n            <h1>Surat Peringatan</h1>\n        </div>\n        <div class=\"content\">\n            {{ $json.output }}\n        </div>\n    </div>\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        688,
+        -16
+      ],
+      "id": "0b0423a4-397c-4911-bc97-e89121c5f846",
+      "name": "Mengubah output menjadi HTML"
+    },
+    {
+      "parameters": {
+        "html_content": "={{ $json.html }}",
+        "output_filename": "=Surat Peringatan  {{ $('Form Pengajuan SP').item.json['Nama Karyawan'] }}"
+      },
+      "type": "n8n-nodes-htmlcsstopdf.htmlcsstopdf",
+      "typeVersion": 1,
+      "position": [
+        864,
+        -16
+      ],
+      "id": "d69c3494-68f6-42c5-8ef2-f87c6e0a957f",
+      "name": "Mengextrak HTML ke pdf",
+      "credentials": {
+        "htmlcsstopdfApi": {
+          "id": "m9qEqk760iZM9SKG",
+          "name": "HTML to PDF account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.pdf_url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1072,
+        -16
+      ],
+      "id": "d5251100-6a78-4531-ba20-36db677c9362",
+      "name": "Mengambil data pdf dari html"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Mengubah output menjadi HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form Pengajuan SP": {
+      "main": [
+        [
+          {
+            "node": "Memasukan data ke sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mengedit Nama File": {
+      "main": [
+        [
+          {
+            "node": "Kirim Ke email Karyawan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mengambil data karyawan": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memasukan data ke sheet": {
+      "main": [
+        [
+          {
+            "node": "mengambil data karyawan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mengubah output menjadi HTML": {
+      "main": [
+        [
+          {
+            "node": "Mengextrak HTML ke pdf",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mengextrak HTML ke pdf": {
+      "main": [
+        [
+          {
+            "node": "Mengambil data pdf dari html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mengambil data pdf dari html": {
+      "main": [
+        [
+          {
+            "node": "Mengedit Nama File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "9531683e-574d-45cc-88f0-1c88b4479c1d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "a5df06fd13290af2fa8e5429150de9f9c332b581c1019292577ff8c83814cbde"
+  },
+  "id": "fkvDIQlnss70jPxo",
+  "tags": []
+}
